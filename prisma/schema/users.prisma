@@ -1,7 +1,8 @@
 model User {
     id Int @id @default(autoincrement())
-    password String
+    firstName String 
+    LastName String
     email String @unique
-    completeName String @unique
+    password String
     createAt DateTime @default(now())
 }

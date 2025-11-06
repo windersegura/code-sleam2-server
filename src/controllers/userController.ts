@@ -1,29 +1,36 @@
 import {Request, Response} from 'express';
-import { getAllUsers, createNewUser } from '../services/userService';
-import { CUser } from "../models/user"
+//import { getAllUsers } from '../services/userService';
+import { User } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 
-export const getUsers = async (req: Request, res: Response) => {
-    const users = await getAllUsers();
-    res.json(users);
-}
 
-export const createUser = async (req: Request, res: Response) => {
-    // Implementation for creating a user
-    const newUser: CUser = new CUser();
-    
-    //new user mapping 
-    try {
-      newUser.password = req.body.user.password;
-      newUser.email = req.body.user.email;
-      newUser.completeName = req.body.user.completeName;
-     // newUser.createAt = Date.now();
-      const User = await createNewUser(newUser)
-      
-      res.json(User);
-   } 
-   catch (error) {
-      console.log(error);
-    }
+const prisma = new PrismaClient(); 
 
-    
+// export const createUser = async (req: Request, res: Response) => {
+//     // Implementation for creating a user
+//     
+//     try {
+//       const User = await createNewUser(req.body.user);
+//       
+//       res.json(User);
+//    } 
+//    catch (error) {
+//       console.log(error);
+//     }
+//     
+// }
+
+export const login = async (req:Request, res: Response) => {
+  try {
+    const {email, password} = req.body;
+
+    const user = await prisma.user.findUnique({
+      where: { email }
+    });
+
+    res.json(user);
+  } catch (error) {
+    console.log("Login Failed: ", error);
+    return res.json({message: "Login Failed!"}); 
+  } 
 }
