@@ -1,6 +1,6 @@
 import express, {Request, Response} from "express";
 import userRoutes from "./routes/userRoutes";
-import { logger } from "./middlewares/logger";
+import { logger } from "./middlewares/logger.middleware";
 
 const app = express()
 const PORT = process.env.PORT || 5001;
